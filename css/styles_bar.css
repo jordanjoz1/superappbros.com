@@ -1,0 +1,64 @@
+#bar_chart 
+{
+    padding: 10px;
+}
+
+#bar_chart_tooltip {
+	position: absolute;
+	padding: 5px;
+	font-weight: bold;
+	left: 0px;
+	top: 0px;
+	display: block;
+	z-index:1000;
+	opacity: 1;
+	visibility: hidden;
+    border:2px solid black;
+    background-color:rgba(0,0,0,0.8);
+    color:white;
+    font-size:12px;
+    font-family:arial;
+    border-radius: 5px;
+    vertical-align: middle;
+    text-align: center;
+    min-width:50px;
+}
+
+.player_line
+{
+    stroke-width: 2.5;
+    stroke: #000;
+}
+
+.individual_bar 
+{
+    fill: #b41b5e;
+}
+
+.team_bar 
+{
+    fill: #7dc31d;
+}
+
+.reckless_bar 
+{
+    fill: #253891;
+}
+
+.cautious_bar 
+{
+    fill: #d49f20;
+}
+
+.axis line, .axis path 
+{
+    shape-rendering: crispEdges;
+    stroke: black;
+    fill: none;
+}
+
+.bar_x
+{
+    stroke: #000;
+    stroke-width: 1.5;
+}

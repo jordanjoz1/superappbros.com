@@ -1,0 +1,25 @@
+ul#stats_info li
+{
+	display:inline-block;
+    min-width: 150px;
+}
+
+#basic_info
+{
+    height: 70px;
+}
+
+.crop 
+{ 
+    width: 120px;
+    height: 150px;
+    overflow: hidden;
+    background: white;
+}
+
+.crop img
+{ 
+    width: 120px; 
+    height: 300px; 
+    margin: 0px 0 0 0px; 
+}

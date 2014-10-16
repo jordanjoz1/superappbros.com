@@ -1,0 +1,28 @@
+.cal-day {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.cal-month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+.cal-year-text {
+	stroke:#FFF;
+}
+
+.RdYlGn .q0-11{fill:rgb(233,233,256)}
+.RdYlGn .q1-11{fill:rgb(225,225,256)}
+.RdYlGn .q2-11{fill:rgb(215,215,256)}
+.RdYlGn .q3-11{fill:rgb(195,195,256)}
+.RdYlGn .q4-11{fill:rgb(175,175,256)}
+.RdYlGn .q5-11{fill:rgb(150,150,256)}
+.RdYlGn .q6-11{fill:rgb(130,130,256)}
+.RdYlGn .q7-11{fill:rgb(110,110,256)}
+.RdYlGn .q8-11{fill:rgb(80,80,256)}
+.RdYlGn .q9-11{fill:rgb(45,45,256)}
+.RdYlGn .q10-11{fill:rgb(0,0,256)}
+
+     

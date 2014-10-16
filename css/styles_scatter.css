@@ -1,0 +1,74 @@
+#individual_label 
+{
+    stroke: #b41b5e;
+    font-size: 20px;
+}
+
+#team_label 
+{
+    stroke: #7dc31d;
+    font-size: 20px;
+}
+
+#reckless_label 
+{
+    stroke: #253891;
+    font-size: 20px;
+}
+
+#cautious_label 
+{
+    stroke: #d49f20;
+    font-size: 20px;
+}
+
+#scatter_plot_tooltip {
+	position: absolute;
+	padding: 5px;
+	font-weight: bold;
+	left: 0px;
+	top: 0px;
+	display: block;
+	z-index:1000;
+	opacity: .8;
+	visibility: hidden;
+    border:2px solid black;
+    background-color:rgba(0,0,0,0.8);
+    color:white;
+    font-size:12px;
+    font-family:arial;
+    border-radius: 5px;
+    vertical-align: middle;
+    text-align: center;
+    min-width:50px;
+}
+
+.frame 
+{
+    fill: none;
+    stroke: #000;
+}
+
+.hero_dot, .daredevil_dot, .camper_dot, .guardian_dot
+{
+    fill: #444;
+    opacity: 0.5;
+}
+
+.scatterplot 
+{
+    background: white;
+    padding: 10px;
+    border: 10px;
+}
+
+circle.hidden 
+{
+    fill: #ccc;
+}
+
+circle.highlight
+{
+    fill: #000;
+    opacity: 1.0;
+}

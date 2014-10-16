@@ -1,0 +1,47 @@
+#bubble_chart_container {
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+    text-align:center;
+    margin-bottom: 0px;
+}
+
+#bubble_chart {
+    padding: 0px;
+    border: 0px;
+}
+
+#bubble_chart_tooltip {
+	position: absolute;
+	padding: 5px;
+	font-weight: bold;
+	left: 0px;
+	top: 0px;
+	display: block;
+	z-index:1000;
+	visibility: hidden;
+	opacity: .7;
+    border:2px solid black;
+    background-color:rgba(0,0,0,0.8);
+    color:white;
+    font-size:12px;
+    font-family:arial;
+    border-radius: 5px;
+    vertical-align: middle;
+    text-align: center;
+    min-width:50px;
+    overflow: auto;
+}
+
+.bubble_node {
+    fill: #999;
+}
+
+.pie_path 
+{
+    stroke-opacity: 0.0;
+}
+
+.arc path {
+  stroke: #fff;
+}

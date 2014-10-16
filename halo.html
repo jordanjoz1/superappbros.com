@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Halo Reach: Investigating Playstyles</title>
+        
+        <!-- styles -->
+        <link rel="stylesheet" type="text/css" href="css/dot-luv/jquery-ui-1.10.2.custom.css" >
+        <link rel="stylesheet" type="text/css" href="css/introjs/introjs.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/styles_bar.css"/>
+        <link rel="stylesheet" type="text/css" href="css/styles_bubble.css"/>
+        <link rel="stylesheet" type="text/css" href="css/styles_cal.css"/>
+        <link rel="stylesheet" type="text/css" href="css/styles_combined.css"/>
+        <link rel="stylesheet" type="text/css" href="css/styles_player_info.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/styles_scatter.css"></link>
+        
+        <!-- external libraries -->
+        <script src="js/d3/d3.v3.min.js"></script>
+        <script src="js/jquery/jquery-1.9.1.js"></script>
+        <script src="js/jquery/jquery-ui-1.10.2.custom.js"></script>
+        <script src="js/introjs/intro.js"></script>
+        
+        <!-- data files -->
+        <script src="data/calendar_data.js"></script>
+        <script src="data/medals_meta.js"></script>
+        <script src="data/weapons_meta.js"></script>
+        <script src="data/scatter_data.js"></script>
+
+        <!-- helper files -->
+        <script src="js/indicators.js"></script>
+        <script src="js/helpers.js"></script>
+        <script src="js/calculator.js"></script>
+        
+        <!-- javascript visualizations -->
+        <script src="js/layout.js"></script>
+        <script src="js/calendar.js"></script>
+        <script src="js/scatter.js"></script>   
+        <script src="js/bar.js"></script>
+        <script src="js/bubble.js"></script>
+
+<!-- google analytics -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-40649535-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+        <meta charset="UTF-8">
+    </head>
+    <body>
+    
+        <!-- information dialog -->
+        <div id="info_dialog" title="Info">
+            <p>Need help?</p>
+            <p>If you'd like more info on what sort of data is being represented here, check out an actual Bungie.net <a href="http://halo.bungie.net/Stats/Reach/default.aspx?player=CommunistOrange">profile</a>.</p>
+            <p>Information about Halo Reach in general can be found <a href="http://halo.wikia.com/wiki/Halo:_Reach">here</a>.</p>
+            <p>You can also see a list of the various Halo Reach <a href="http://halo.wikia.com/wiki/Halo:_Reach_Medals">medals</a> if you'd like to delve even further into the data.</p>
+            <p>Check out our informational video here:</p>
+        </div>
+        
+        <!-- calendar view dialog -->
+        <div id="calendar_dialog" title="Calendar">
+            <form>
+                <div id="calendar_controls">
+                    <input type="radio" name="type" id="cal_since" class="control" checked="checked" onClick="renderCalendar(0)"><label for="cal_since">Player Since</label>
+                    <input type="radio" name="type" id="cal_last" class="control" onClick="renderCalendar(1)"><label for="cal_last">Last Played</label>
+                </div>
+            </form>
+            <div id="calendar"></div>
+        </div>
+        
+        <!-- calculator view dialog -->
+        <div id="calculator_dialog" title="Playstyle Calculator">
+            <form>
+                <div id="calculator_controls">
+                </div>
+            </form>
+        </div>
+        
+        <!-- header bar -->
+        <div id="titlebar">
+            <h1 id="title">HALO REACH: Investigating Playstyles</h1>
+            <div id="info_button" class="ui-state-default ui-corner-all" title=".ui-icon-info" data-intro="And that's it! We hope you enjoy our visualization, we sure enjoyed making it." data-step='12' data-position='right'><a href="#" id="info-dialog-link" ><span class="ui-icon ui-icon-info"></span></a></div>
+            <div id="restart_tour_button" class="style_button" onclick="introJs().start()">Restart the tour</div>
+            <div id="multi_select_controls" data-intro='You can toggle between selecting a single or multiple playstyles at once.</br>Choosing the former will show you representative players when you move to a new playstyle.' data-step='8' data-position='bottom'>
+                <input type="radio" name="type" id="single_select" checked="checked" onClick="toggleSelectType(0)"><label for="single_select">Single select</label>
+                <input type="radio" name="type" id="multi_select" onClick="toggleSelectType(1)"><label for="multi_select">Multi select</label>
+            </div>
+            <div id="titlebar_right">
+                <button id="calculator-dialog-link" class="titlebar_option" data-intro="Try creating your own playstyles by selecting their conditions manually." data-step='10' data-position='left'>Playstyle Calculator</button>
+                <button id="calendar-dialog-link" class="titlebar_option" data-intro="Finally, the calendar feature can show you what times Halo activity peaks and drops." data-step='11' data-position='left'>Calendar</button>
+                <div id="percent_selected">20% Selected</div>
+            </div>
+        </div>
+        
+        <!-- main visualization area -->
+        <div id="main_container">
+            <div id="left_div">
+                <div id="style_buttons" data-intro="You can toggle which playstyle you'd like to view with these buttons here." data-step='2' data-position='right'>
+                    <div class="col4">
+                        <input type="checkbox" id="daredevil_button" class="style_button" onclick="toggle_style(this); toggleQuadrant('daredevil');" /><label class="style_button_label" for="daredevil_button">Daredevil</label>				
+                    </div>
+                    <div class="col4">
+                        <input type="checkbox" id="hero_button" checked="true" class="style_button" onclick="toggle_style(this); toggleQuadrant('hero');" /><label class="style_button_label" for="hero_button">Hero</label>
+                    </div>
+                    <div class="col4">
+                        <input type="checkbox" id="guardian_button" class="style_button" onclick="toggle_style(this); toggleQuadrant('guardian');" /><label class="style_button_label" for="guardian_button">Guardian</label>
+                    </div>
+                    <div class="col4">
+                        <input type="checkbox" id="camper_button" class="style_button" onclick="toggle_style(this); toggleQuadrant('camper');" /><label class="style_button_label" for="camper_button">Camper</label>
+                    </div>
+                </div>
+                
+                <!-- scatter plot -->
+                <div id="scatter_plot_container" data-intro="This is the main playstyle scatter plot. We categorized peoples' playstyles </br> across two dimensions: team vs. individualistic and reckless vs. cautious." data-step='1' data-position='right'></div>
+                
+                <div id="left_bottom">
+
+                <!-- bar chart -->
+                <div id="bar_chart_container" data-intro="You can see how the selected playstyle compares to the average Halo player." data-step='3' data-position='right'></div>
+
+                </div>
+            </div>
+            <div id="right_div">
+                <div id="bubble_chart_legend" data-intro='Hovering over any of the bubbles will give you a glimpse into the </br>preferred weapon selection of said players. Neat!' data-step='5' data-position='left'>
+                    <div class="col4">
+                        <div class="legend_box short_range"></div>
+                        <div class="legend_text">Mid Range Weapons</div>
+                    </div>
+                    <div class="col4">
+                        <div class="legend_box mid_range"></div>
+                        <div class="legend_text">Short Range Weapons</div>
+                    </div>
+                    <div class="col4">
+                        <div class="legend_box long_range"></div>
+                        <div class="legend_text">Long Range Weapons</div>		
+                    </div>
+                    <div class="col4">
+                        <div class="legend_box vehicle"></div>
+                        <div class="legend_text">Vehicles</div>
+                    </div>
+                </div>
+                <!-- bubble chart -->
+                <div id="bubble_chart_container" data-intro='You can check out what sorts of medals players of this playstyle are likely to obtain here.' data-step='4' data-position='left'></div>
+                
+                <div id="right_bottom" class="ui-corner-all">
+                
+                    <!-- the player info card -->
+                    <script type="text/javascript" src="js/playerinfo.js"></script> 
+
+                    <!-- and it's corresponding accordion container -->
+                    <div id="player_info" data-intro="The Player Info Card can give you a close-up glimpse of what individual Halo Reach players are like." data-step='6' data-position='left'>
+                        <h1 id="player_name" data-intro='This player was selected from the scatter plot and is shown by the black lines on the bar chart.' data-step='7' data-position='top'>Meet...</h1>
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="imageContainer">
+                                        <div class="crop"><img id="playerImage"></img></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="accordion">
+                                        <h3 data-intro='Be sure to check out their info in the Player Card!' data-step='9' data-position='left'>Basic Info</h3>
+                                        <div id="basic_info">
+                                        </div>
+                                        <h3>Stats Info</h3>
+                                        <ul id="stats_info">
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- initial overlay -->
+        <div class="ui-overlay">
+            <div class="ui-widget-overlay" id="instructions_overlay"></div>
+        </div>
+        
+        <!-- intro dialog -->
+        <div id="intro_dialog_containter" class="ui-widget ui-widget-content ui-corner-all">
+            <div class="ui-dialog-content ui-widget-content" id="intro_dialog">
+                <h1>WELCOME</h1>
+                <h1>to the Halo Reach Playstyle Explorer!</h1>
+                <br/>
+                <p>Toggle different playstyles on the left side to see how different players perform and what sorts of medals they receive.</p>
+                <p>Notice that the "Hero" playstyle is already selected.</p>
+                <p>If you'd like more info on what sort of data is being represented here, check out an actual Bungie.net <a href="http://halo.bungie.net/Stats/Reach/default.aspx?player=CommunistOrange">profile</a>.</p>
+                <p>Information about Halo Reach in general can be found <a href="http://halo.wikia.com/wiki/Halo:_Reach">here</a>.</p>
+                <p>You can also see a list of the various Halo Reach <a href="http://halo.wikia.com/wiki/Halo:_Reach_Medals">medals</a> if you'd like to delve even further into the data.</p>
+                <button id="intro_continue" onclick="intro_continue();">Begin Tour</button>
+            </div>
+        </div>
+        
+        <!-- scatter plot tooltip -->
+        <div id="scatter_plot_tooltip"></div>
+
+        <!-- bar chart tooltip -->
+        <div id="bar_chart_tooltip"></div>
+
+        <!-- bubble chart tooltip -->
+        <div id="bubble_chart_tooltip"></div>
+
+    </body>
+</html>
